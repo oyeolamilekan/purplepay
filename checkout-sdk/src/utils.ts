@@ -36,7 +36,7 @@ function init({ title, config }: { title: any, config: any }) {
         const container = document.createElement("div");
         container.setAttribute("id", containerId);
         container.appendChild(loader);
-        const source = new URL(origin);
+        const source = new URL(originUrl);
         container.setAttribute("style", containerStyle);
         document.body.insertBefore(container, document.body.childNodes[0]);
         const iframe = document.createElement("IFRAME") as HTMLIFrameElement;

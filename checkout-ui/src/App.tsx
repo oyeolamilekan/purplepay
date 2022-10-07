@@ -1,34 +1,51 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
+// App.jsx
+import { useEffect, useState } from "react";
 
-function App() {
-  const [count, setCount] = useState(0)
+const postMessageToListeners = ({ event, data }: { event: string, data?: any | null }) => {
+  window.parent && window.parent.postMessage({ type: event, data }, "*");
+};
+
+const App = () => {
+  const [config, setConfig] = useState({});
+
+  // listening for messages starts here
+  const handleMessage = (event: any) => {
+    if (event.data.type === "sdkData") {
+      setConfig(event.data.config)
+    }
+  };
+
+
+  useEffect(() => {
+    window.addEventListener("message", handleMessage);
+    return () => {
+      window.removeEventListener("message", handleMessage);
+    };
+  }, []);
+
+  // const { publicKey, amount, meta, currency } = config;
+
+  const handleCloseClick = () => postMessageToListeners({ event: "pay.close" });
+
+  const handleSuccessClick = () => {
+    const transactionData = {
+      type: "transaction",
+      transaction: {},
+    };
+    postMessageToListeners({ event: "pay.success", data: transactionData });
+  };
+
+  const handleErrorClick = () =>
+    postMessageToListeners({ event: "pay.server_error" });
 
   return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+    <div style={{ backgroundColor: "purple", padding: "10px", maxWidth: "500px", margin: "auto", height: "400px" }}>
+      <p>Powered by Purple pay</p>
+      <button onClick={handleCloseClick}>Close SDK</button>
+      <button onClick={handleSuccessClick}>Simulate success</button>
+      <button onClick={handleErrorClick}>Simulate error</button>
     </div>
-  )
-}
+  );
+};
 
-export default App
+export default App;
