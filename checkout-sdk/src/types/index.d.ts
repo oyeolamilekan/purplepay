@@ -3,5 +3,11 @@ declare global {
         closePayFrame: any;
         Pay: any
     }
+
+    const process: {
+        env: {
+            ENV: string
+        }
+    }
 }
 export { };

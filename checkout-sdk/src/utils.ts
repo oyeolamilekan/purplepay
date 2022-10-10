@@ -2,13 +2,12 @@
 "use strict";
 
 // the origin should point to your hosted app (React, Vue etc) in production,
-//  but for development, it would point to localhost of your app (pay-app)
-const originUrl: string = "http://localhost:3000";
+// but for development, it would point to localhost of your app (pay-app)
+const originUrl: string = process.env.ENV === 'development' ? "http://localhost:3000" : "https://purplepay.netlify.com";
 const iFrameId: string = "pay-frame-id";
 const containerId: string = "pay-widget-wrapper";
 
-function init({ title, config }: { title: any, config: any }) {
-
+function init() {
     function init({ title, config }: { title: string, config: string }) {
         if (
             document.getElementById(containerId) &&

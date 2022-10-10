@@ -17,7 +17,7 @@ function Pay({ onSuccess, onError, onClose, ...rest }: { onSuccess: Function, on
     Pay.prototype.onClose = onClose || isRequired("onClose callback");
     Pay.prototype.onError = onError || isRequired("onError callback");
     Pay.prototype.onSuccess = onSuccess || isRequired("onSuccess callback");
-    Pay.prototype.utils = utils({ title: "payment", config: "new" });
+    Pay.prototype.utils = utils();
 }
 
 Pay.prototype.setup = function () {
